@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function getAge(){
+            var   aDate=new   Date();
+            var   thisYear= aDate.getFullYear();
+            var brith=document.getElementById("date1").value;
+            if(!brith){
+                alert('请输入年龄');
+                return false;
+            }//再加上其他判断
+            brith=brith.substr(0,4);
+            age=(thisYear-brith);
+            document.getElementById("date2").value=age;
+        }
+    </script>
+</head>
+<body>
+出生日期：<input type="date" name="brith" id="date1" onchange="getAge()">
+<!--<input type="button" onclick="getAge()" value="获取年龄">-->
+年龄：<input type="text" name="age" id="date2">
+
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="hbi.core.des.mapper.CreditMapper">
+    <resultMap id="BaseResultMap" type="hbi.core.des.dto.Credit">
+        <result column="CREDITID" property="creditid" jdbcType="DECIMAL" />
+        <result column="SID" property="sid" jdbcType="DECIMAL" />
+        <result column="SUBJECTNUM" property="subjectnum" jdbcType="VARCHAR" />
+        <result column="SUBJECTNAME" property="subjectname" jdbcType="VARCHAR" />
+        <result column="TOTALCREDITS" property="totalcredits" jdbcType="DECIMAL" />
+    </resultMap>
+
+    <select id="selectCreditBySId" resultMap="BaseResultMap">
+        SELECT csl.creditid,
+               csl.sid,
+               csl.subjectnum,
+               csl.subjectname,
+               csl.totalcredits
+  FROM des_credit csl
+        WHERE csl.sid = #{sid,jdbcType=DECIMAL}
+    </select>
+    <delete id="deleteCreditBySId" parameterType="hbi.core.des.dto.Credit">
+        delete from
+        des_credit
+        where sid = #{sid,jdbcType=DECIMAL}
+    </delete>
+
+
+
+</mapper>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://kendo.cdn.telerik.com/2021.1.330/styles/kendo.common.min.css" rel="stylesheet"/>
+    <link href="https://kendo.cdn.telerik.com/2021.1.330/styles/kendo.default.min.css" rel="stylesheet"/>
+    <link href="resources/css/StudentInfo.css" rel="stylesheet"/>
+    <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2021.1.330/js/kendo.all.min.js"></script>
+</head>
+<body>
+<div id="grid"></div>
+<div class="page-content" style="min-height: 450px">
+    <div class="page-head" style="display: block">
+        <div class="page-title" style="display: inline-block">
+            <h1 id="page-title">学生信息管理</h1>
+        </div>
+    </div>
+    <div class="page-content-main">
+        <div id="page-content-loading" style="display: none;">
+            <i class="fa fa-refresh fa-spin"></i>
+            <span>加载
+                中</span>
+        </div>
+
+        <div class="k-tabstrip-wrapper" id="tabstrip-parent" style=""><div id="mainTab" style="position: static; left: 0px; top: 0px; outline: 0px !important;" data-role="tabstrip" tabindex="0" class="k-widget k-header k-tabstrip k-floatwrap k-tabstrip-top" role="tablist" aria-activedescendant="mainTab_ts_active"><ul class="k-tabstrip-items k-reset" style=""><li class="k-item k-state-default k-first" role="tab" aria-controls="mainTab-1"><span class="k-loading k-complete"></span><span class="k-link" data-tabid="home">首页</span></li><li class="k-item k-state-default k-last k-tab-on-top k-state-active" role="tab" aria-controls="mainTab-2" aria-selected="true" id="mainTab_ts_active"><span class="k-loading k-complete"></span><span class="k-link" data-tabid="HR_EMPLOYEE">员工管理<span class="k-icon k-i-close"></span></span></li></ul><div class="k-content" style="display: none;" aria-expanded="false" role="tabpanel" id="mainTab-1" aria-hidden="true"><iframe id="iframe_home" name="home" src="home.html?functionCode=home" style="height: 416px; width: 100%;" frameborder="0"></iframe></div><div class="k-content k-state-active" style="display: block;" aria-expanded="true" role="tabpanel" id="mainTab-2"><iframe id="iframe_HR_EMPLOYEE" name="HR_EMPLOYEE" src="hr/employee.html?functionCode=HR_EMPLOYEE" style="height: 416px; width: 100%;" frameborder="0"></iframe></div></div></div>
+    </div>
+</div>
+<script>
+    var dataSource = new kendo.data.DataSource({
+        schema: {                                    //Object远程数据解析配置
+            data: "rows",                      //这是接受所有的数据
+            total: "total",               //总数据的行数
+            model: {
+                sid: "id",
+                fields: {
+                    sname: {type: 'string'},
+                    sage: {type: 'long'},
+                    sex: {type: 'string'},
+                    sphone: {type: 'long'},
+                    semail: {type: 'string'},
+                    sbirthday: {type: 'formatDate'}
+                }
+            }
+        },
+        transport: {
+            read: {
+                url: "/core_war_exploded/api/public/queryAll",
+                type: "GET",
+                dataType: "json"
+            }
+        },
+        pageSize: 10
+    });
+    console.log(dataSource);
+    $("#grid").kendoGrid({
+        dataSource: dataSource,
+        schema: {//字段摘要
+            model: {
+                sid: "id",
+                fields: {
+                    sname: {type: 'string'},
+                    sage: {type: 'long'},
+                    sex: {type: 'string'},
+                    sphone: {type: 'long'},
+                    semail: {type: 'string'},
+                    sbirthday: {type: 'formatDate'}
+                }
+            }
+        },
+        columns: [{
+            field: "sid",
+            title: "Id"
+        }, {
+            field: "sname",
+            title: "姓名"
+        }, {
+            field: "sage",
+            title: "年龄"
+        }, {
+            field: "ssex",
+            title: "性别"
+        },{
+            field: "sphone",
+            title: "手机"
+        },{
+            field: "semail",
+            title: "邮箱"
+        },{
+            field: "sbirthday",
+            title: "出生日期"
+        }],
+        pageable: true
+    });
+</script>
+
+</body>
+</html>

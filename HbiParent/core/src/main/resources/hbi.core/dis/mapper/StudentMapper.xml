@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hbi.core.dis.mapper.StudentMapper">
+
+    <select id="queryAll" resultType="hbi.core.dis.dto.Student">
+        select * from student_info where 1=1 order by sid
+        <trim prefix="WHERE" prefixOverrides="AND |OR">
+            <if test="sid != null and sid !=''">
+                and sid = #{sid}
+            </if>
+            <if test="sname != null and sname !=''">
+                and sname = #{sname,jdbcType=VARCHAR2}
+            </if>
+            <if test="sage != null and sage !=''">
+                and sage = #{sage,jdbcType=NUMBER}
+            </if>
+            <if test="ssex != null and ssex !=''">
+                and ssex = #{ssex,jdbcType=VARCHAR2}
+            </if>
+            <if test="sphone != null and sphone !=''">
+                and sphone = #{sphone,jdbcType=NUMBER}
+            </if>
+            <if test="semail != null and semail !=''">
+                and semail = #{semail,jdbcType=VARCHAR2}
+            </if>
+            <if test="sbirthday != null and sbirthday !=''">
+                and sbirthday = #{sbirthday,jdbcType=DATE}
+            </if>
+        </trim>
+    </select>
+
+    <delete id="delBySid" parameterType="java.lang.Long">
+        delete from student_info where sid = #{sid}
+    </delete>
+
+    <insert id="submit" keyColumn="sid" keyProperty="sid">
+            insert into student_info values(#{sid},#{sname},#{sage},#{ssex},#{sphone},#{semail},#{sbirthday})
+    </insert>
+
+<!--    <insert id="submit" keyColumn="sid" keyProperty="sid">-->
+<!--        <if test="sid != null">-->
+<!--            update student_info-->
+<!--            <set>-->
+<!--                <if test="sname != null">-->
+<!--                    sname = #{sname},-->
+<!--                </if>-->
+<!--                <if test="sage != null">-->
+<!--                    sage = #{sage},-->
+<!--                </if>-->
+<!--                <if test="sbirthday != null">-->
+<!--                    sbirthday = #{sbirthday,jdbcType=DATE}-->
+<!--                </if>-->
+<!--            </set>-->
+<!--            <where>-->
+<!--                sid = #{sid}-->
+<!--            </where>-->
+<!--        </if>-->
+<!--        <if test="sid == null">-->
+<!--            insert into student_info(<include refid="info"/>) values(<include refid="value"/>)-->
+<!--        </if>-->
+<!--    </insert>-->
+
+<!--    <sql id="info">-->
+<!--        <trim suffixOverrides=",">-->
+<!--            <if test="sname!=null">-->
+<!--                sname,-->
+<!--            </if>-->
+<!--            <if test="sage!=null">-->
+<!--                sage,-->
+<!--            </if>-->
+<!--            <if test="sbirthday!=null">-->
+<!--                sbirthday,-->
+<!--            </if>-->
+<!--        </trim>-->
+<!--    </sql>-->
+<!--    <sql id="value">-->
+<!--    <trim suffixOverrides=",">-->
+<!--        <if test="sname!=null">-->
+<!--            #{sname},-->
+<!--        </if>-->
+<!--        <if test="sage!=null">-->
+<!--            #{sage},-->
+<!--        </if>-->
+<!--        <if test="sbirthday!=null">-->
+<!--            #{sbirthday},-->
+<!--        </if>-->
+<!--    </trim>-->
+<!--    </sql>-->
+    <update id="update" parameterType="java.lang.Long">
+        update student_info
+        <set>
+            <if test="sname != null">
+                sname = #{sname},
+            </if>
+            <if test="sage != null">
+                sage = #{sage},
+            </if>
+            <if test="ssex != null">
+                ssex = #{sex},
+            </if>
+            <if test="sphone != null">
+                sphone = #{sphone},
+            </if>
+            <if test="semail != null">
+                semail = #{semail},
+            </if>
+            <if test="sbirthday != null">
+                sbirthday = #{sbirthday,jdbcType=DATE}
+            </if>
+        </set>
+        where sid=#{sid}
+    </update>
+</mapper>

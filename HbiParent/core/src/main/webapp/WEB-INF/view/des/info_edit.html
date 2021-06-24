@@ -1,0 +1,255 @@
+<#include "../include/header.html">
+<body>
+    <script src="${base.contextPath}/common/code?infoSsexData=DES.INFO_SSEX" type="text/javascript"></script>
+    <script src="${base.contextPath}/common/code?infoStatusData=DES.INFO_STATUS" type="text/javascript"></script>
+    <script type="text/javascript">
+    var viewModel = kendo.observable({
+            model: {
+                isEnabled: <#if RequestParameters.sid??> false <#else> true </#if>,
+        },
+        source:infoSsexData,
+        save: function(e){
+        var data= viewModel.model.toJSON();
+        if(data.sid){
+            data.__status = "update";
+        }else{
+            data.__status = "add";
+        }
+        var validator = $("#mainform").data("kendoValidator");
+        if (validator.validate()) {
+            Hap.request({
+                type   : 'POST',
+                url    : '${base.contextPath}/student/info/submit',
+                data   : kendo.stringify([data]),
+                success: function (data) {
+                    window.parent.$("#dialog").data("kendoWindow").close();
+                }
+            })
+        }
+    },
+    closeWin: function(e){
+        window.parent.$("#dialog").data("kendoWindow").close();
+    }
+    });
+
+    //var isedit = '${RequestParameters.employeeId!0}' == '';
+    var sid = '${RequestParameters.sid!0}';
+
+
+
+
+</script>
+<div id="page-content">
+    <form id="mainform"  class="form-horizontal" method="post" enctype="application/json;charset=UTF-8">
+        <div class="row" style="margin-left: 5px;">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="col-sm-3 control-label"><@spring.message "*姓名"/>:</label>
+                        <div class="col-sm-9">
+                            <input type="text" required style="width:100%" name="sname"
+                                   data-label="<@spring.message '姓名'/>" data-role="maskedtextbox"
+                                   data-bind="enabled: model.isEnabled,value:model.sname" class="k-textbox">
+                            <span data-for="sname" class=".k-invalid-msg"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="col-sm-3 control-label"><@spring.message "*年龄"/>:</label>
+                        <div class="col-sm-9">
+                            <input type="text" required style="width:100%" id="sage" data-label="<@spring.message '年龄'/>"
+                                   name="sage" data-bind="value:model.sage" class="k-textbox" >
+                            <span data-for="sage" class=".k-invalid-msg"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="col-sm-3 control-label"><@spring.message "*性别"/>:</label>
+                        <div class="col-sm-9">
+                            <input style="width:100%" required name="ssex"
+                                   data-label="<@spring.message '性别'/>" id="ssex"
+                                   data-bind="value:model.ssex">
+                            <span data-for="ssex" class=".k-invalid-msg"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="col-sm-3 control-label"><@spring.message "手机号"/>:</label>
+                        <div class="col-sm-9">
+                            <input type="tel" style="width:100%" name="sphone" id="sphone" data-bind="value:model.sphone" class="k-textbox">
+                            <span data-for="sphone" class=".k-invalid-msg"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="col-sm-3 control-label"><@spring.message "邮箱"/>:</label>
+                        <div class="col-sm-9">
+                            <input type="email" id="semail" style="width:100%" name="semail" data-bind="value:model.semail" class="k-textbox">
+                            <span data-for="semail" class=".k-invalid-msg"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="col-sm-3 control-label"><@spring.message "入学日期"/>:</label>
+                        <div class="col-sm-9">
+                            <input style="width:100%" id="admissiondate" name="admissiondate" data-bind="enabled: model.isEnabled,value:model.admissiondate" class="datepicker">
+                            <span data-for="admissiondate" class=".k-invalid-msg"></span>
+                        </div>
+                    </div>、
+                    <script>
+                        $("#admissiondate").kendoDatePicker({
+                            change:function(){
+                                var value = this.value();
+                                if(!value){
+                                    value = initMinDate;
+                                }
+                                graduatedate.min(value);
+                            }
+                        }).data("kendoDatePicker");
+                    </script>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="col-sm-3 control-label"><@spring.message "状态"/>:</label>
+                        <div class="col-sm-9">
+                            <input required style="width:100%" name="status"
+                                   data-label="<@spring.message '状态'/>" id="status"
+                                   data-bind="value:model.status">
+                            <span data-for="status" class=".k-invalid-msg"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="col-sm-3 control-label"><@spring.message "毕业日期"/>:</label>
+                        <div class="col-sm-9">
+                            <input style="width:100%" id="graduatedate" name="graduatedate" data-bind="value:model.graduatedate" class="datepicker">
+                            <span data-for="graduatedate" class=".k-invalid-msg"></span>
+                        </div>
+                    </div>
+                    <script>
+                        $("#graduatedate").kendoDatePicker({
+                            change:function(){
+                                var value = this.value();
+                                if(!value){
+                                    value = initMaxDate;
+                                }
+                                admissiondate.max(value);
+                            }
+                        }).data("kendoDatePicker");;
+                    </script>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="col-sm-3 control-label"><@spring.message "学校名称"/>:</label>
+                        <div class="col-sm-9">
+                            <input type="text" required style="width:100%" name="slname"
+                                   data-label="<@spring.message '学校名称'/>" data-role="maskedtextbox"
+                                   data-bind="value:model.slname"  id="slname">
+                            <span data-for="slname" class=".k-invalid-msg"></span>
+                            <script>
+                                $("#slname").kendoLov($.extend(${lovProvider.getLov(base.contextPath, base.locale, "LOV_SCHOOL")}, {}));
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="mainBottom" class="text-right" style="bottom: 15px;position: fixed;  float: left;padding-top:15px;border-top:1px solid #ebebeb;width:100%; background: #fff;">
+    <span class="btn btn-primary" data-bind="click:save" type="submit" style="margin-right:5px"><@spring.message "hap.save"/></span>
+    <span class="btn btn-default" data-bind="click:closeWin" type="button" style="margin-right:25px;"><@spring.message "hap.cancel"/></span>
+</div>
+
+<script type="text/javascript">
+    kendo.bind($('#mainBottom'),viewModel);
+    kendo.bind($('#mainform'), viewModel);
+
+
+    function isNotEmpty(obj) {
+        if(obj != undefined && obj != null && obj != ""){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    var initMinDate = new Date(1900, 0, 1);
+    var initMaxDate = new Date(2099, 11, 31);
+    var admissiondate = $("#admissiondate").data("kendoDatePicker");
+    var graduatedate = $("#graduatedate").data("kendoDatePicker");
+
+    if (sid!=0) {
+        $.ajax({
+            url: '${base.contextPath}/student/info/query?sid=${RequestParameters.sid!0}',
+            success: function (args) {
+                var a0 = args.rows[0] || {};
+                for (var k in a0) {
+                    viewModel.model.set(k, a0[k]);
+                    isNotEmpty(viewModel.model.admissiondate) ? graduatedate.min(viewModel.model.admissiondate) : "";
+                    isNotEmpty(viewModel.model.graduatedate) ? admissiondate.max(viewModel.model.graduatedate) : "";
+                }
+            }
+        });
+    }
+
+    //验证
+    $("#mainform").kendoValidator({
+        messages: {
+            required: '<@spring.message "hap.validation.notempty"/>'
+        },
+        invalidMessageType : "tooltip"
+    })
+
+    $("#sphone,#sage,#semail").kendoValidator({
+        rules: {
+            phoneRange: function (input) {
+                if (input.is("[name=sphone]")) {
+                    var value = input.val();
+                    return value && /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/.test(value);
+                }
+                return true;
+            },
+            ageRange: function (input) {
+                if (input.is("[name=sage]")) {
+                    var value = input.val();
+                    return /^(?:[1-9][0-9]?|120)$/.test(value);
+                }
+                return true;
+            },
+            emailRange: function (input) {
+                if (input.is("[name=semail]")) {
+                    var value = input.val();
+                    return value && /^[a-zA-Z0-9_]{4,16}[a-zA-Z0-9]@([a-pr-zA-PR-Z0-9]{2,10}\.(com|com\.cn|cn))|(qq|QQ)\.com$/.test(value);
+                }
+                return true;
+            }
+        },
+        messages: {
+            phoneRange: "{0}手机格式错误",
+            ageRange: "{0}年龄有误，请在1-120之间！",
+            emailRange: "{0}邮箱格式错误"
+        },
+    }).data("kendoValidator");
+
+    // //日期
+    // $(".datepicker").kendoDatePicker({
+    //     animation: false
+    // });
+    //性别下拉框
+    $("#ssex").kendoComboBox({
+        dataSource: {
+            data: infoSsexData
+        },
+        valuePrimitive: true,
+        dataTextField: "meaning",
+        dataValueField: "value"
+    });
+    //状态栏下拉框
+    $("#status").kendoComboBox({
+        dataSource:infoStatusData,
+        valuePrimitive: true,
+        dataTextField: "meaning",
+        dataValueField: "value"
+    });
+</script>
+</body>
+</html>
