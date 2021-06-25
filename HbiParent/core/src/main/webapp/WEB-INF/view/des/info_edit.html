@@ -140,12 +140,14 @@
                     <div class="col-sm-6">
                         <label class="col-sm-3 control-label"><@spring.message "学校名称"/>:</label>
                         <div class="col-sm-9">
-                            <input type="text" required style="width:100%" name="slname"
-                                   data-label="<@spring.message '学校名称'/>" data-role="maskedtextbox"
-                                   data-bind="value:model.slname"  id="slname">
-                            <span data-for="slname" class=".k-invalid-msg"></span>
+                            <input type="text" style="width:100%"
+                                   data-bind="value:model.slname,text:model.slname"  id="slname">
                             <script>
-                                $("#slname").kendoLov($.extend(${lovProvider.getLov(base.contextPath, base.locale, "LOV_SCHOOL")}, {}));
+                                $("#slname").kendoLov($.extend(${lovProvider.getLov(base.contextPath, base.locale, "LOV_SCHOOL")}, {
+                                    query: function (e) {
+                                        e.param['enabledFlag'] = 'Y';
+                                    }
+                                }));
                             </script>
                         </div>
                     </div>
